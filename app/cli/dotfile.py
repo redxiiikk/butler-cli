@@ -7,7 +7,6 @@ from app.utils import echo
 app: typer.Typer = typer.Typer()
 
 
-
 def hanle_dotfile_symlink(repo_file: str, symlink_file: str):
     repo_file = os.path.abspath(repo_file)
     symlink_file = os.path.abspath(symlink_file)
@@ -15,15 +14,17 @@ def hanle_dotfile_symlink(repo_file: str, symlink_file: str):
     if not os.path.exists(symlink_file):
         echo.debug(f"{repo_file}:{symlink_file}")
         return
-    
+
     if not os.path.islink(symlink_file):
         echo.debug(f"{repo_file}:{symlink_file}")
         return
-    
+
     if os.path.realpath(symlink_file) != repo_file:
-        echo.debug(f"this is a symlink file: {repo_file}:{os.path.realpath(symlink_file)}")
+        echo.debug(
+            f"this is a symlink file: {repo_file}:{os.path.realpath(symlink_file)}"
+        )
         return
-    
+
     echo.debug(f"don't need update dotfile: {symlink_file}")
     return
 
@@ -39,13 +40,13 @@ def walk_dotfile(root: str, parent: str = None):
         )
 
         if os.path.isdir(sub_file_path):
-            walk_dotfile(
-                root, f"{parent}/{sub_file}" if parent else sub_file
-            )
+            walk_dotfile(root, f"{parent}/{sub_file}" if parent else sub_file)
         elif os.path.isfile(sub_file_path):
             hanle_dotfile_symlink(
                 f"{root}/{parent}/{sub_file}" if parent else f"{root}/{sub_file}",
-                f"{os.getenv('HOME')}/.{parent}/{sub_file}" if parent else f"{os.getenv('HOME')}/.{sub_file}"
+                f"{os.getenv('HOME')}/.{parent}/{sub_file}"
+                if parent
+                else f"{os.getenv('HOME')}/.{sub_file}",
             )
         else:
             echo.error(f"unknown file type: {sub_file_path}")
