@@ -14,6 +14,10 @@ def update(
         None, help="dotfile repo config, just support local repo"
     )
 ):
+    if not dotfiles_repo:
+        EchoUtils.error("dotfile repo can't none")
+        raise typer.Exit(code=1)
+
     if not os.path.isabs(dotfiles_repo):
         dotfiles_repo = os.path.join(os.getcwd(), dotfiles_repo)
 
