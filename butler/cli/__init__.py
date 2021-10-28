@@ -11,6 +11,6 @@ app.add_typer(dotfile.app, name="dotfile")
 @app.callback(invoke_without_command=True)
 def butler(ctx: typer.Context):
     if ctx.invoked_subcommand is not None:
-        raise typer.Exit()
+        return
 
     EchoUtils.debug("butler...")
