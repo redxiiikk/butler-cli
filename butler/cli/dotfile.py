@@ -2,8 +2,8 @@ import os
 
 import typer
 
-from dotfiles_cli.service.dotfile import DotfileService
-from dotfiles_cli.utils import EchoUtils
+from butler.service.dotfile import DotfileService
+from butler.utils import EchoUtils
 
 app: typer.Typer = typer.Typer()
 

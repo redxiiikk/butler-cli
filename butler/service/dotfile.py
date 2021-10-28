@@ -1,7 +1,7 @@
 import os.path
 import typing as t
 
-from dotfiles_cli.utils import EchoUtils, DirectoryUtils, FileUtils
+from butler.utils import EchoUtils, DirectoryUtils, FileUtils
 
 
 class DotfileService:

@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "dotfiles-cli"
+name = "butler"
 version = "0.1.0"
 description = ""
 authors = ["redxiiikk <kai.he.0811@qq.com>"]
