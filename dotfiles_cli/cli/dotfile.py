@@ -2,8 +2,8 @@ import os
 
 import typer
 
-from app.service.dotfile import DotfileService
-from app.utils import EchoUtils
+from dotfiles_cli.service.dotfile import DotfileService
+from dotfiles_cli.utils import EchoUtils
 
 app: typer.Typer = typer.Typer()
 
@@ -27,11 +27,6 @@ def update(
 
     EchoUtils.info("start update dotfile")
     DotfileService.update(dotfiles_repo)
-
-
-@app.command()
-def add():
-    typer.echo("zsh")
 
 
 if __name__ == "__main__":

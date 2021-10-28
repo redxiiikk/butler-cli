@@ -1,6 +1,6 @@
 import typer
 
-from app.cli import dotfile
+from dotfiles_cli.cli import dotfile
 
 app: typer.Typer = typer.Typer()
 
