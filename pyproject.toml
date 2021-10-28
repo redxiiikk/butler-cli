@@ -6,7 +6,7 @@ authors = ["redxiiikk <kai.he.0811@qq.com>"]
 readme = "README.md"
 
 [tool.poetry.scripts]
-butler = "butler.main:app"
+butler = "butler.cli:app"
 
 [tool.poetry.dependencies]
 python = "^3.9"
