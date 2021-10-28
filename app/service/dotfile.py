@@ -20,7 +20,9 @@ class DotfileService:
         )
 
     @classmethod
-    def __do_update_dotfile(cls, root: str, parent: t.Optional[str], dotfile: str):
+    def __do_update_dotfile(
+        cls, root: str, parent: t.Optional[str], dotfile: str
+    ) -> None:
         parent = parent if parent else ""
 
         symlink = os.path.abspath(
@@ -28,22 +30,32 @@ class DotfileService:
         )
         dotfile = os.path.abspath(os.path.join(root, parent, dotfile))
 
+        if not os.path.exists(dotfile) or not os.path.isfile(dotfile):
+            EchoUtils.error(f"dotfile not existed or isn't a file: {dotfile}")
+            return
+
         if not os.path.exists(symlink):
-            EchoUtils.debug(f"{dotfile}:{symlink}")
+            os.symlink(dotfile, symlink)
+            EchoUtils.debug(f"create dotfile symlink: {dotfile}:{symlink}")
+            return
+
+        if os.path.isdir(symlink):
+            EchoUtils.error(f"symlink is a directory: {symlink}")
             return
 
         if not os.path.islink(symlink):
-            EchoUtils.debug(f"{dotfile}:{symlink}")
+            os.remove(symlink)
+            os.symlink(dotfile, symlink)
+            EchoUtils.debug(f"create dotfile symlink: {dotfile}:{symlink}")
             return
 
         if os.path.realpath(symlink) != dotfile:
-            EchoUtils.debug(
-                f"this is a symlink file: {dotfile}:{os.path.realpath(symlink)}"
-            )
+            os.unlink(symlink)
+            os.symlink(dotfile, symlink)
+            EchoUtils.debug(f"create dotfile symlink: {dotfile}:{symlink}")
             return
 
-        EchoUtils.debug(f"don't need update dotfile: {symlink}")
-        return
+        EchoUtils.debug(f"don't need handle dotfile: {symlink}")
 
     @staticmethod
     def __filter_hidden_file(root: str, parent: t.Optional[str], file: str) -> bool:
