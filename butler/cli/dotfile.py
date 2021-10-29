@@ -9,11 +9,7 @@ app: typer.Typer = typer.Typer()
 
 
 @app.command()
-def update(
-    dotfiles_repo: str = typer.Argument(
-        None, help="dotfile repo config, just support local repo"
-    )
-):
+def update(dotfiles_repo: str = typer.Argument(None, help="dotfile repo config, just support local repo")):
     if not dotfiles_repo:
         EchoUtils.error("dotfile repo can't none")
         raise typer.Exit(code=1)

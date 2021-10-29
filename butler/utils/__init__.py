@@ -39,9 +39,7 @@ class DirectoryUtils:
                 continue
 
             if os.path.isdir(os.path.join(directory, sub)):
-                DirectoryUtils.walk(
-                    root, os.path.join(parent, sub), handle_func, filter_func
-                )
+                DirectoryUtils.walk(root, os.path.join(parent, sub), handle_func, filter_func)
             elif os.path.isfile(os.path.join(directory, sub)):
                 handle_func(root, parent, sub)
             else:

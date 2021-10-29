@@ -20,14 +20,10 @@ class DotfileService:
         )
 
     @classmethod
-    def __do_update_dotfile(
-        cls, root: str, parent: t.Optional[str], dotfile: str
-    ) -> None:
+    def __do_update_dotfile(cls, root: str, parent: t.Optional[str], dotfile: str) -> None:
         parent = parent if parent else ""
 
-        symlink = os.path.abspath(
-            f"{cls.HOME}/.{parent}/{dotfile}" if parent else f"{cls.HOME}/.{dotfile}"
-        )
+        symlink = os.path.abspath(f"{cls.HOME}/.{parent}/{dotfile}" if parent else f"{cls.HOME}/.{dotfile}")
         dotfile = os.path.abspath(os.path.join(root, parent, dotfile))
 
         if not os.path.exists(dotfile) or not os.path.isfile(dotfile):
