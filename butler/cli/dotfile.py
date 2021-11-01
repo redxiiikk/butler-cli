@@ -21,10 +21,6 @@ def update(dotfiles_repo: str = typer.Argument(None, help="dotfile repo config, 
         EchoUtils.error(f"config repo path not existed: {dotfiles_repo}")
         return typer.Exit(1)
 
-    if not os.path.isdir(dotfiles_repo):
-        EchoUtils.error(f"config repo is not a directory: {dotfiles_repo}")
-        return typer.Exit(1)
-
     EchoUtils.info("start update dotfile")
     DotfileService.update(dotfiles_repo)
 
