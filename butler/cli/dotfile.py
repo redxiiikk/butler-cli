@@ -8,8 +8,13 @@ from butler.utils import EchoUtils
 app: typer.Typer = typer.Typer()
 
 
-@app.command()
-def update(dotfiles_repo: str = typer.Argument(None, help="dotfile repo config, just support local repo")):
+@app.callback(invoke_without_command=True)
+def update(
+    ctx: typer.Context, dotfiles_repo: str = typer.Argument(None, help="dotfile repo config, just support local repo")
+):
+    if ctx.invoked_subcommand is not None:
+        return
+
     if not dotfiles_repo:
         EchoUtils.error("dotfile repo can't none")
         raise typer.Exit(code=1)
