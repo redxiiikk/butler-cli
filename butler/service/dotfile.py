@@ -13,11 +13,12 @@ class DotfileService:
             EchoUtils.error(f"dotfiles repo not existed: {dotfiles_repo}")
             return
 
-        DirectoryUtils.walk(
+        for root, parent, dotfile in DirectoryUtils.walk(
             dotfiles_repo,
-            handle_func=DotfileService.__do_update_dotfile,
             filter_func=DotfileService.__filter_hidden_file,
-        )
+        ):
+            cls.__do_update_dotfile(root, parent, dotfile)
+            yield root, parent, dotfile
 
     @classmethod
     def __do_update_dotfile(cls, root: str, parent: t.Optional[str], dotfile: str) -> None:

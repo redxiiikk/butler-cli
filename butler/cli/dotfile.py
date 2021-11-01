@@ -27,7 +27,8 @@ def update(
         return typer.Exit(1)
 
     EchoUtils.info("start update dotfile")
-    DotfileService.update(dotfiles_repo)
+    for root, parent, dotfile in DotfileService.update(dotfiles_repo):
+        EchoUtils.debug(f"TUI Tree: {root} - {parent} - {dotfile}")
 
 
 if __name__ == "__main__":

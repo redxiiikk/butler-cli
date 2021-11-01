@@ -24,7 +24,6 @@ class DirectoryUtils:
     def walk(
         root: str,
         parent: str = None,
-        handle_func: t.Callable[[str, str, str], None] = None,
         filter_func: t.Callable[[str, str, str], bool] = None,
     ):
         parent = parent if parent else ""
@@ -39,9 +38,9 @@ class DirectoryUtils:
                 continue
 
             if os.path.isdir(os.path.join(directory, sub)):
-                DirectoryUtils.walk(root, os.path.join(parent, sub), handle_func, filter_func)
+                yield from DirectoryUtils.walk(root, os.path.join(parent, sub), filter_func)
             elif os.path.isfile(os.path.join(directory, sub)):
-                handle_func(root, parent, sub)
+                yield root, parent, sub
             else:
                 EchoUtils.error(f"unknown type: {directory}")
 
