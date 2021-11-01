@@ -1,6 +1,9 @@
 import os
+import time
 
 import typer
+from rich.live import Live
+from rich.tree import Tree
 
 from butler.service.dotfile import DotfileService
 from butler.utils import EchoUtils
@@ -22,13 +25,18 @@ def update(
     if not os.path.isabs(dotfiles_repo):
         dotfiles_repo = os.path.join(os.getcwd(), dotfiles_repo)
 
+    dotfiles_repo = os.path.abspath(dotfiles_repo)
+
     if not os.path.exists(dotfiles_repo) or not os.path.isdir(dotfiles_repo):
         EchoUtils.error(f"config repo path not existed: {dotfiles_repo}")
         return typer.Exit(1)
 
-    EchoUtils.info("start update dotfile")
-    for root, parent, dotfile in DotfileService.update(dotfiles_repo):
-        EchoUtils.debug(f"TUI Tree: {root} - {parent} - {dotfile}")
+    root_node = Tree(dotfiles_repo)
+    with Live(refresh_per_second=4) as console_live:
+        for root, parent, dotfile in DotfileService.update(dotfiles_repo):
+            root_node.add(f"{parent}/{dotfile}")
+            console_live.update(root_node)
+            time.sleep(0.4)
 
 
 if __name__ == "__main__":
