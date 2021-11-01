@@ -74,6 +74,7 @@ create dotfile symlink: : /home/user/dotfiles/zshrc:/home/user/.zshrc
 
 ## ✅ Todo
 
+- [ ] 添加 TUI
 - [ ] 同步 oh my zsh 插件
 - [ ] 同步软件
 - [ ] 完善文档工作
