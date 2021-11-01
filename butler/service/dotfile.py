@@ -17,11 +17,14 @@ class DotfileService:
             dotfiles_repo,
             filter_func=DotfileService.__filter_hidden_file,
         ):
-            cls.__do_update_dotfile(root, parent, dotfile)
+            if not cls.__do_update_dotfile(root, parent, dotfile):
+                EchoUtils.debug("error!")
+                return
+
             yield root, parent, dotfile
 
     @classmethod
-    def __do_update_dotfile(cls, root: str, parent: t.Optional[str], dotfile: str) -> None:
+    def __do_update_dotfile(cls, root: str, parent: t.Optional[str], dotfile: str) -> bool:
         parent = parent if parent else ""
 
         symlink = os.path.abspath(f"{cls.HOME}/.{parent}/{dotfile}" if parent else f"{cls.HOME}/.{dotfile}")
@@ -29,30 +32,25 @@ class DotfileService:
 
         if not os.path.exists(dotfile) or not os.path.isfile(dotfile):
             EchoUtils.error(f"dotfile not existed or isn't a file: {dotfile}")
-            return
+            return False
 
         if not os.path.exists(symlink):
             os.symlink(dotfile, symlink)
-            EchoUtils.debug(f"create dotfile symlink: {dotfile}:{symlink}")
-            return
+            return True
 
         if os.path.isdir(symlink):
             EchoUtils.error(f"symlink is a directory: {symlink}")
-            return
+            return False
 
-        if not os.path.islink(symlink):
+        if os.path.isfile(symlink):
             os.remove(symlink)
             os.symlink(dotfile, symlink)
-            EchoUtils.debug(f"create dotfile symlink: {dotfile}:{symlink}")
-            return
 
-        if os.path.realpath(symlink) != dotfile:
+        if os.path.islink(symlink) and os.path.realpath(symlink) != dotfile:
             os.unlink(symlink)
             os.symlink(dotfile, symlink)
-            EchoUtils.debug(f"create dotfile symlink: {dotfile}:{symlink}")
-            return
 
-        EchoUtils.debug(f"don't need handle dotfile: {symlink}")
+        return True
 
     @staticmethod
     def __filter_hidden_file(root: str, parent: t.Optional[str], file: str) -> bool:
