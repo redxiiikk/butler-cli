@@ -6,6 +6,7 @@ from rich.live import Live
 from rich.tree import Tree
 
 from butler.service.dotfile import DotfileService
+from butler.tui import FileTree
 from butler.utils import EchoUtils
 
 app: typer.Typer = typer.Typer()
@@ -31,12 +32,11 @@ def update(
         EchoUtils.error(f"config repo path not existed: {dotfiles_repo}")
         return typer.Exit(1)
 
-    root_node = Tree(dotfiles_repo)
-    with Live(refresh_per_second=4) as console_live:
+    file_tree = FileTree(dotfiles_repo)
+    with file_tree.live:
         for root, parent, dotfile in DotfileService.update(dotfiles_repo):
-            root_node.add(f"{parent}/{dotfile}")
-            console_live.update(root_node)
-            time.sleep(0.4)
+            file_tree.add(os.path.join(root, parent), dotfile)
+            file_tree.update()
 
 
 if __name__ == "__main__":
