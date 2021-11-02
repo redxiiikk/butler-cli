@@ -5,7 +5,7 @@ from rich.live import Live
 from rich.tree import Tree
 
 
-class FileTree:
+class FileTreeUI:
     def __init__(self, root: str):
         if not root:
             raise Exception("root can't be null")
@@ -28,7 +28,7 @@ class FileTree:
         if path in self.nodes:
             return self.nodes.get(path)
         else:
-            return self.__get_parent_node(os.path.abspath(os.path.join(path, "..")))
+            return self.__get_parent_node(os.path.abspath(os.path.join(path, "../..")))
 
     def update(self):
         self.live.update(self.root_node)
