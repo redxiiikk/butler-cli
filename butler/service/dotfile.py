@@ -1,7 +1,43 @@
 import os.path
 import typing as t
 
+import typer
+
 from butler.utils import DirectoryUtils, EchoUtils, FileUtils
+
+
+class Dotfile:
+    HOME = f"{os.getenv('HOME')}"
+
+    def __init__(self, root: str, parent: t.Optional[str], dotfile: str):
+        if parent is None:
+            parent = ""
+
+        self.dotfile_path = os.path.abspath(os.path.join(root, parent, dotfile))
+
+        if not os.path.exists(self.dotfile_path) and not os.path.isfile(self.dotfile_path):
+            raise typer.Exit(code=1)
+
+        self.symlink_path = os.path.abspath(f"{self.HOME}/.{parent}/{dotfile}" if parent else f"{self.HOME}/.{dotfile}")
+
+    def create_symlinks(self):
+        if not os.path.exists(self.symlink_path):
+            os.symlink(self.dotfile_path, self.symlink_path)
+
+        if os.path.isdir(self.symlink_path):
+            EchoUtils.error(f"symlink is a directory: {self.symlink_path}")
+
+        if os.path.isfile(self.symlink_path):
+            os.remove(self.symlink_path)
+            os.symlink(self.dotfile_path, self.symlink_path)
+
+        if os.path.islink(self.symlink_path) and os.path.realpath(self.symlink_path) != self.dotfile_path:
+            os.unlink(self.symlink_path)
+            os.symlink(self.dotfile_path, self.symlink_path)
+
+    @property
+    def status(self) -> bool:
+        return os.path.realpath(self.symlink_path) == self.dotfile_path
 
 
 class DotfileService:
@@ -17,40 +53,16 @@ class DotfileService:
             dotfiles_repo,
             filter_func=DotfileService.__filter_hidden_file,
         ):
-            if not cls.__do_update_dotfile(root, parent, dotfile):
+            if not cls.__do_update_dotfile(Dotfile(root, parent, dotfile)):
                 EchoUtils.debug("error!")
                 return
 
             yield root, parent, dotfile
 
     @classmethod
-    def __do_update_dotfile(cls, root: str, parent: t.Optional[str], dotfile: str) -> bool:
-        parent = parent if parent else ""
-
-        symlink = os.path.abspath(f"{cls.HOME}/.{parent}/{dotfile}" if parent else f"{cls.HOME}/.{dotfile}")
-        dotfile = os.path.abspath(os.path.join(root, parent, dotfile))
-
-        if not os.path.exists(dotfile) or not os.path.isfile(dotfile):
-            EchoUtils.error(f"dotfile not existed or isn't a file: {dotfile}")
-            return False
-
-        if not os.path.exists(symlink):
-            os.symlink(dotfile, symlink)
-            return True
-
-        if os.path.isdir(symlink):
-            EchoUtils.error(f"symlink is a directory: {symlink}")
-            return False
-
-        if os.path.isfile(symlink):
-            os.remove(symlink)
-            os.symlink(dotfile, symlink)
-
-        if os.path.islink(symlink) and os.path.realpath(symlink) != dotfile:
-            os.unlink(symlink)
-            os.symlink(dotfile, symlink)
-
-        return True
+    def __do_update_dotfile(cls, dotfile: Dotfile) -> bool:
+        dotfile.create_symlinks()
+        return dotfile.status
 
     @staticmethod
     def __filter_hidden_file(root: str, parent: t.Optional[str], file: str) -> bool:
