@@ -2,8 +2,8 @@ import os
 
 import typer
 
+from butler.cli.tui import FileTreeUI
 from butler.service.dotfile import DotfileService
-from cli.tui import FileTreeUI
 from butler.utils import EchoUtils
 
 app: typer.Typer = typer.Typer()
