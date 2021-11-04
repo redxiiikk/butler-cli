@@ -28,7 +28,7 @@ class FileTreeUI:
         if path in self.nodes:
             return self.nodes.get(path)
         else:
-            return self.__get_parent_node(os.path.abspath(os.path.join(path, "../..")))
+            return self.__get_parent_node(os.path.abspath(os.path.join(path, "../")))
 
     def update(self):
         self.live.update(self.root_node)
