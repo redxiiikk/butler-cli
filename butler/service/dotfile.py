@@ -26,6 +26,7 @@ class Dotfile:
 
         if os.path.isdir(self.symlink_path):
             EchoUtils.error(f"symlink is a directory: {self.symlink_path}")
+            return
 
         if os.path.isfile(self.symlink_path):
             os.remove(self.symlink_path)
@@ -45,13 +46,9 @@ class DotfileService:
 
     @classmethod
     def update(cls, dotfiles_repo: str):
-        if not os.path.exists(dotfiles_repo):
-            EchoUtils.error(f"dotfiles repo not existed: {dotfiles_repo}")
-            return
-
         for root, parent, dotfile in DirectoryUtils.walk(
             dotfiles_repo,
-            filter_func=DotfileService.__filter_hidden_file,
+            filter_func=DotfileService.__is_hidden_file,
         ):
             if not cls.__do_update_dotfile(Dotfile(root, parent, dotfile)):
                 EchoUtils.debug("error!")
@@ -65,6 +62,6 @@ class DotfileService:
         return dotfile.status
 
     @staticmethod
-    def __filter_hidden_file(root: str, parent: t.Optional[str], file: str) -> bool:
+    def __is_hidden_file(root: str, parent: t.Optional[str], file: str) -> bool:
         parent = parent if parent else ""
         return not FileUtils.is_hidden_file(os.path.join(root, parent, file))
