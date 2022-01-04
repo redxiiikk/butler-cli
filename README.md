@@ -16,15 +16,13 @@ Butler 是一个你最忠诚的管家，帮助你更好的管理、使用自己�
 
 ## 🔨 安装
 
+> 暂时只能从源码进行编译，后续将提供安装脚本
+
 ```shell
 $ git clone https://github.com/redxiiikk/butler-cli.git
 $ cd butler-cli
-$ poetry install
-$ peotry build
-$ pip install --user dist/butler-<version>-py3-none-any.whl # please replace the version number
+$ go build -o butler
 ```
-
-> 参考文档: [Build a Package - Typer](https://typer.tiangolo.com/tutorial/package/#create-a-wheel-package)
 
 ## ✨ Features
 
@@ -32,52 +30,29 @@ $ pip install --user dist/butler-<version>-py3-none-any.whl # please replace the
 
 ## 🚀 如何使用
 
+### 管理本地 dotfile
+
 ```shell
-$ butler --help
-Usage: butler [OPTIONS] COMMAND [ARGS]...
+$ ./butler dotfile --help
+Sync your dotfile
 
-Options:
-  --install-completion  Install completion for the current shell.
-  --show-completion     Show completion for the current shell, to copy it or
-                        customize the installation.
-  --help                Show this message and exit.
+Usage:
+  butler dotfile [flags]
 
-Commands:
-  dotfile
+Flags:
+  -h, --help   help for dotfile
 
-$ butler dotfile --help
-Usage: butler dotfile [OPTIONS] COMMAND [ARGS]...
-
-Options:
-  --help  Show this message and exit.
-
-Commands:
-  update
-
-$ butler dotfile update --help 
-Usage: butler dotfile update [OPTIONS] [DOTFILES_REPO]
-
-Arguments:
-  [DOTFILES_REPO]  dotfile repo config, just support local repo
-
-Options:
-  --help  Show this message and exit.
-
-$ update ../dotfiles 
-start update dotfile
-create dotfile symlink: : /home/user/dotfiles/docker/config.json:/home/user/.docker/config.json
-create dotfile symlink: : /home/user/dotfiles/docker/daemon.json:/home/user/.docker/daemon.json
-create dotfile symlink: : /home/user/dotfiles/gitconfig:/home/user/.gitconfig
-create dotfile symlink: : /home/user/dotfiles/gitignore:/home/user/.gitignore
-create dotfile symlink: : /home/user/dotfiles/zshrc:/home/user/.zshrc
+$ ./butler dotfile ../dotfile-repo
+CREATE:     /home/user/.gitconfig -> /home/user/dotfile-repo/gitconfig
+CREATE:     /home/user/.gitconfig -> /home/user/dotfile-repo/gitconfig
+CREATE:         /home/user/.zshrc -> /home/user/dotfile-repo/zshrc
 ```
 
 ## ✅ Todo
 
-- [ ] 添加 TUI
-- [ ] 同步 oh my zsh 插件
-- [ ] 同步软件
-- [ ] 完善文档工作
-- [ ] 配置化支持
-- [ ] 设置定时任务
-- [ ] 支持 Github 仓库
+- [ ] GitHub Actions 打包
+- [ ] GitHub 依赖版本监测
+- [ ] 本地配置文件支持
+- [ ] 添加安装脚本
+- [ ] 单元测试覆盖
+- [ ] 添加 dotfile 文件
