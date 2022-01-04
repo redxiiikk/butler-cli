@@ -11,6 +11,9 @@
       ░                                           
 </pre>
 
+[![PreRelease Build](https://github.com/redxiiikk/butler-cli/actions/workflows/pre-release-build.yml/badge.svg)](https://github.com/redxiiikk/butler-cli/actions/workflows/pre-release-build.yml)
+
+
 Butler 是一个你最忠诚的管家，帮助你更好的管理、使用自己的电脑。
 它可以做到很多的事情，例如可以帮助你在多台电脑间同步你的配置、软件、插件等等。
 
