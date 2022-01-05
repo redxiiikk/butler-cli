@@ -11,7 +11,7 @@
       ░                                           
 </pre>
 
-[![PreRelease Build](https://github.com/redxiiikk/butler-cli/actions/workflows/pre-release-build.yml/badge.svg)](https://github.com/redxiiikk/butler-cli/actions/workflows/pre-release-build.yml)
+[![PreRelease Build](https://github.com/redxiiikk/butler-cli/actions/workflows/prerelease-build.yml/badge.svg)](https://github.com/redxiiikk/butler-cli/actions/workflows/prerelease-build.yml)
 
 
 Butler 是一个你最忠诚的管家，帮助你更好的管理、使用自己的电脑。
