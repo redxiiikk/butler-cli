@@ -22,7 +22,7 @@ jobs:
           GOOS=linux  GOARCH=amd64 go build -o out/butler-linux
           GOOS=darwin GOARCH=amd64 go build -o out/butler-darwin
       - name: Set Date
-        run: echo "DATE=$(date + "%Y-%m-%d")" >> $GITHUB_ENV
+        run: echo "DATE=$(date +"%Y-%m-%d")" >> $GITHUB_ENV
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
