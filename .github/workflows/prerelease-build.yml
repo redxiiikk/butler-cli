@@ -2,9 +2,6 @@ name: PreRelease Build
 on:
   schedule:
     - cron: 0 0 * * 1-5
-  push:
-    branches:
-      - master
 jobs:
   pre-release:
     runs-on: ubuntu-20.04
