@@ -3,14 +3,20 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"github.com/redxiiikk/butler-cli/utils"
 	"io/fs"
+	"log"
 	"os"
 	"path"
 	"path/filepath"
 	"strings"
 
+	"github.com/redxiiikk/butler-cli/context"
+	"github.com/redxiiikk/butler-cli/utils"
 	"github.com/spf13/cobra"
+)
+
+const (
+	repoLocalPathConfig = "dotfile.repo.local"
 )
 
 var (
@@ -19,11 +25,19 @@ var (
 		Short: "Sync your dotfile",
 		Args:  cobra.MaximumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
+			configContext := context.NewConfigOperation()
+			isNeedUpdate := false
+
 			var dotfileRepoPath = ""
 			if len(args) == 0 {
-				dotfileRepoPath = readFromConfig()
+				dotfileRepoPath, _ = configContext.Get(repoLocalPathConfig)
 			} else {
 				dotfileRepoPath = args[0]
+				isNeedUpdate = true
+			}
+
+			if dotfileRepoPath == "" {
+				log.Fatal("need input dotfile repo path")
 			}
 
 			if !path.IsAbs(dotfileRepoPath) {
@@ -39,14 +53,13 @@ var (
 			if err := doHandleDotfileRepo(dotfileRepoPath); err != nil {
 				_ = fmt.Errorf("dotfile sync error: %s", err)
 			}
+
+			if isNeedUpdate {
+				configContext.Set(repoLocalPathConfig, dotfileRepoPath)
+			}
 		},
 	}
 )
-
-func readFromConfig() string {
-	fmt.Println("read dot repo path from butler config")
-	return "../dotfiles"
-}
 
 func checkRepoPath(dotfileRepoPath string) error {
 	stat, err := os.Stat(dotfileRepoPath)
@@ -93,7 +106,7 @@ func doHandleDotfileRepo(dotfileRepoPath string) error {
 			}
 		}
 
-        fmt.Printf("CREATE: %60s -> %s\n", symlinkPath, dotfilePath)
+		fmt.Printf("CREATE: %60s -> %s\n", symlinkPath, dotfilePath)
 		return os.Symlink(dotfilePath, symlinkPath)
 	})
 }
