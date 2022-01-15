@@ -24,6 +24,7 @@ jobs:
         with:
           name: prerelease
           tag_name: prerelease
+          prerelease: true
           files: |
             out/butler-linux
             out/butler-darwin
