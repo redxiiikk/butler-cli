@@ -23,6 +23,7 @@ jobs:
         uses: softprops/action-gh-release@v0.1.14
         with:
           name: prerelease
+          tag_name: prerelease
           files: |
             out/butler-linux
             out/butler-darwin
