@@ -51,9 +51,9 @@ CREATE:         /home/user/.zshrc -> /home/user/dotfile-repo/zshrc
 
 ## ✅ Todo
 
-- [ ] GitHub Actions 打包
-- [ ] GitHub 依赖版本监测
-- [ ] 本地配置文件支持
+- [x] GitHub Actions 打包
+- [x] GitHub 依赖版本监测
+- [x] 本地配置文件支持
 - [ ] 添加安装脚本
 - [ ] 单元测试覆盖
 - [ ] 添加 dotfile 文件
