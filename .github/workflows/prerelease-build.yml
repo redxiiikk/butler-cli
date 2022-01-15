@@ -1,4 +1,4 @@
-name: PreRelease Build
+name: Prerelease Build
 on:
   schedule:
     - cron: 0 0 * * 1
