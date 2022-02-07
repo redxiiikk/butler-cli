@@ -1,20 +1,21 @@
 package cmd
 
 import (
-    "github.com/spf13/cobra"
+	"github.com/spf13/cobra"
 )
 
 var (
-    rootCmd = &cobra.Command{
-        Use:   "butler",
-        Short: "Help You Managerment computer",
-    }
+	rootCmd = &cobra.Command{
+		Use:   "butler",
+		Short: "Help You Management computer",
+	}
 )
 
 func Execute() error {
-    return rootCmd.Execute()
+	return rootCmd.Execute()
 }
 
 func init() {
-    rootCmd.AddCommand(dotfileCmd)
+	rootCmd.AddCommand(dotfileCmd)
+	rootCmd.AddCommand(updateCmd)
 }
