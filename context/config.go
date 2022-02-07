@@ -20,7 +20,7 @@ type ConfigStore struct {
 }
 
 func NewConfigOperation() ConfigOperation {
-	localConfigStorePath := path.Join(os.Getenv("HOME"), ".butler")
+	localConfigStorePath := path.Join(os.Getenv("HOME"), ".butler/config")
 	store := &ConfigStore{
 		path:  localConfigStorePath,
 		items: make(map[string]string),
